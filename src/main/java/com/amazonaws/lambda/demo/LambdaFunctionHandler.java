@@ -1,55 +1,29 @@
-import org.json.JSONObject;
-
+package com.amazonaws.lambda.demo;
+  
+import io.split.client.SplitFactoryBuilder;
 import io.split.client.SplitClient;
 import io.split.client.SplitClientConfig;
-import io.split.client.SplitFactoryBuilder;
-import io.split.client.api.SplitResult;
+import io.split.client.SplitFactory;
 
-public class LambdaFunctionHandler{
+public class SplitJenkinsDemo{
 
-	private SplitClient split;
+    public static void main(String[] args) {
 
-	@Override
-	public static void main(String[] args){
-		context.getLogger().log("Input: " + input);
-		
-		if(split == null) {
-			SplitClientConfig config = SplitClientConfig.builder()
-					.setBlockUntilReadyTimeout(10000)
-					.featuresRefreshRate(5)
-					.build();
-			try {
-				split = SplitFactoryBuilder.build("3206ilbhucf42cca4ftrevbnoi9sg5egiqi", config).client();
-				split.blockUntilReady();
-			} catch (Exception e) {
-				context.getLogger().log(e.getMessage());
-			}			
-		}
-		
-		String userid = "dmartin";
-		if(input != null) {
-			String rawString = input.toString();
-			userid = rawString.replaceAll("\\{", "");
-			userid = userid.replaceAll("\\}", "");
-			userid = userid.substring(userid.indexOf("=") + 1);
-		}
+        SplitClientConfig config = SplitClientConfig.builder()
+                   .setBlockUntilReadyTimeout(10000)
+                   .enableDebug()
+                   .build();
+        try {
 
-		String message = "not evaluated";
-		try {
+            SplitFactory splitFactory = SplitFactoryBuilder.build("82tpd7u6nu20l486vgav12loknaeunl28pu5", config);
+            SplitClient client = splitFactory.client();
+            client.blockUntilReady();
 
-			SplitResult result = split.getTreatmentWithConfig(userid, "dynamic_boxes");
-			String treatment = result.treatment();
-			if (result.config() != null) {
-				JSONObject jsonObj = new JSONObject(result.config());
-				message = jsonObj.toString();
-			}
-			message = treatment + " " + message;
-		} catch (Exception e) {
-			context.getLogger().log("Error! " + e.getMessage());
-		}
+            String result = client.getTreatment("user10","dynamic_boxes");
 
-		context.getLogger().log(message);
-		return message;
-	}
-
-}
+            System.out.print(result + "\n");
+        } catch (Exception e) {
+            System.out.print("Exception: "+e.getMessage());
+        }
+    }
+}  
