@@ -1,8 +1,5 @@
 import org.json.JSONObject;
 
-import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
-
 import io.split.client.SplitClient;
 import io.split.client.SplitClientConfig;
 import io.split.client.SplitFactoryBuilder;
