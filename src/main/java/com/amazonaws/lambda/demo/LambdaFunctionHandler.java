@@ -1,5 +1,3 @@
-package com.amazonaws.lambda.demo;
-
 import org.json.JSONObject;
 
 import com.amazonaws.services.lambda.runtime.Context;
@@ -10,12 +8,12 @@ import io.split.client.SplitClientConfig;
 import io.split.client.SplitFactoryBuilder;
 import io.split.client.api.SplitResult;
 
-public class LambdaFunctionHandler implements RequestHandler<Object, String> {
+public class LambdaFunctionHandler{
 
 	private SplitClient split;
 
 	@Override
-	public String handleRequest(Object input, Context context) {
+	public static void main(String[] args){
 		context.getLogger().log("Input: " + input);
 		
 		if(split == null) {
@@ -24,7 +22,7 @@ public class LambdaFunctionHandler implements RequestHandler<Object, String> {
 					.featuresRefreshRate(5)
 					.build();
 			try {
-				split = SplitFactoryBuilder.build("3jueh9a4g1ksklep3f910s131abaj4sfo8mm", config).client();
+				split = SplitFactoryBuilder.build("3206ilbhucf42cca4ftrevbnoi9sg5egiqi", config).client();
 				split.blockUntilReady();
 			} catch (Exception e) {
 				context.getLogger().log(e.getMessage());
@@ -42,7 +40,7 @@ public class LambdaFunctionHandler implements RequestHandler<Object, String> {
 		String message = "not evaluated";
 		try {
 
-			SplitResult result = split.getTreatmentWithConfig(userid, "multivariant_demo");
+			SplitResult result = split.getTreatmentWithConfig(userid, "dynamic_boxes");
 			String treatment = result.treatment();
 			if (result.config() != null) {
 				JSONObject jsonObj = new JSONObject(result.config());
