@@ -19,12 +19,10 @@ public class SplitJenkinsDemo{
             SplitClient client = splitFactory.client();
             client.blockUntilReady();
 
-            String result = client.getTreatmentWithConfig("user10","jenkins_split_demo");
+            String result = client.getTreatment("user10","jenkins_split_demo");
           
             System.out.print(result + "\n");
-            if (result.config() != null) {
-              System.out.print(result.config + "\n");
-            }
+   
         } catch (Exception e) {
             System.out.print("Exception: "+e.getMessage());
         }
